@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.Properties;
 
 public class Mail {
-    String mailFrom = "kushwah.developer@gmail.com";
+    String mailFrom = "xyz@gmail.com";
     public static void sendEmailWithAttachments(String toAddress,
             String subject, String message, String attachFiles)
             throws MessagingException {
         String host = "smtp.gmail.com";
         String port = "587";
-        String mailFrom = "kushwah.developer@gmail.com";
-        String password = "Vihaan@24012018";
+        String mailFrom = "xyz@gmail.com";
+        String password = "***********";
         // sets SMTP server properties
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
