@@ -1,13 +1,14 @@
 package com.santosh.utility;
 import com.santosh.mail.Mail;
 import com.santosh.model.Product;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.*;
+
 import javax.mail.MessagingException;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /*
 Santosh Kushwah
@@ -45,9 +46,9 @@ public class CsvWritter {
         return records;
     }
     public static String fileName() throws IOException {
-            if(!file.exists()){
-                file.createNewFile();
-            }
+        if(!file.exists()){
+            file.createNewFile();
+        }
         return fileName;
     }
 }

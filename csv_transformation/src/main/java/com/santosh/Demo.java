@@ -1,6 +1,8 @@
 package com.santosh;
 import com.santosh.model.Product;
 import com.santosh.utility.CsvWritter;
+import com.santosh.utility.ExcelWriter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,6 @@ public class Demo {
         String tomail = "santoshkumar021990@gmail.com"; String subject = "Test";
         String messageBody = "Test";
         CsvWritter.csvConverter(productList,headers,tomail,subject,messageBody);
-        //Send Mail
-        System.out.println("Email Send Successfully");
+        ExcelWriter.excelWritter(productList,tomail,subject,messageBody);
     }
 }
