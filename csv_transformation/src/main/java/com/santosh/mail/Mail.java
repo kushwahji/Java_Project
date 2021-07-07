@@ -52,6 +52,5 @@ public class Mail {
         msg.setContent(multipart);
         Transport.send(msg);
         System.out.println("Email Send Successfully");
-
     }
 }
