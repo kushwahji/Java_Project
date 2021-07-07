@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Properties;
 
 public class Mail {
-    String mailFrom = "xyz@gmail.com";
     public static void sendEmailWithAttachments(String toAddress,
             String subject, String message, String attachFiles)
             throws MessagingException {
