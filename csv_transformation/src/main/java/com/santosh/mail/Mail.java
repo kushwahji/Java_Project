@@ -48,7 +48,6 @@ public class Mail {
                 ex.printStackTrace();
             }
             multipart.addBodyPart(attachPart);
-
         }
         msg.setContent(multipart);
         Transport.send(msg);
