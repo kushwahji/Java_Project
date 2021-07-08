@@ -1,5 +1,6 @@
 package com.santosh.helper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -12,7 +13,10 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class EmailSendHelper {
@@ -33,8 +37,8 @@ public class EmailSendHelper {
         try {
             String host = "smtp.gmail.com";
             String port = "587";
-            String mailFrom = "kushwah.developer@gmail.com";
-            String password = "Vihaan@24012018";
+            String mailFrom = "xyz@gmail.com";
+            String password = "****";
             properties.put("mail.smtp.host", host);
             properties.put("mail.smtp.port", port);
             properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
@@ -52,6 +56,21 @@ public class EmailSendHelper {
             e.printStackTrace();
         }
         return session;
+    }
+    public boolean sendMail(String subject,String toEmail, String ccEmail, String bccEmail,String bodyMessage){
+        try {
+            Session session = getEmailSession();
+            Message message = new MimeMessage(session);
+            setRecipients(message,toEmail,ccEmail,bccEmail);
+            message.setSubject(subject);
+            MimeBodyPart messageBody = new MimeBodyPart();
+            messageBody.setContent(bodyMessage, "text/html");
+            EmailHelper emailHelper = new EmailHelper();
+            emailHelper.sendEmail(message);
+        }catch (Exception e){
+            e.printStackTrace();;
+        }
+        return true;
     }
     public boolean sendMailAttachment(String subject,String toEmail, String ccEmail, String bccEmail,String bodyMessage,String attachment){
         try {
@@ -73,7 +92,6 @@ public class EmailSendHelper {
         }
         return true;
     }
-
     private void setAttachments(String attachment, MimeBodyPart messageBody, Multipart multipart, Message message) {
         try {
             if (attachment != null) {
@@ -81,11 +99,15 @@ public class EmailSendHelper {
                     if(!attachment.isEmpty()) {
                         String[] attachmentArray = attachment.split(",");
                         for (String filePath : attachmentArray) {
-                            DataSource source = new FileDataSource(filePath);
-                            messageBody.setDataHandler(new DataHandler(source));
-                            messageBody.setFileName(filePath);
-                            multipart.addBodyPart(messageBody);
-                          //  messageBody.attachFile(filePath);
+                            byte[] encodeFile =encodeFileToBase64(filePath.trim());
+                            if(null!=encodeFile){
+                                messageBody = new MimeBodyPart();
+                                ByteArrayDataSource dataSource = new ByteArrayDataSource(encodeFile,"text/alternative");
+                                messageBody.setDataHandler(new DataHandler(dataSource));
+                                messageBody.setFileName(getFileInstance(filePath.trim()).getName());
+                                multipart.addBodyPart(messageBody);
+                                message.setContent(multipart);
+                            }
                         }
                     }
 
@@ -100,7 +122,41 @@ public class EmailSendHelper {
             e.printStackTrace();;
         }
     }
-
+    private byte[] encodeFileToBase64(String filepath) {
+        byte [] encoded = null;
+        try{
+            encoded = loadFile(getFileInstance(filepath));
+        }catch (Exception io){
+            io.printStackTrace();
+        }
+        return encoded;
+    }
+    private File getFileInstance(String fileName) {
+        File file = null;
+        try {
+            if(!StringUtils.isEmpty(fileName)){
+                file = new File(fileName);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return file;
+    }
+    private byte[] loadFile(File file) {
+        byte[] bytes = null;
+        try (InputStream is = new FileInputStream(file)) {
+            long length = file.length();
+            bytes = new byte[(int)length];
+            int offset =0;
+            int numRead =0;
+            while (offset<bytes.length && (numRead = is.read(bytes,offset,bytes.length-offset))>=0){
+                offset=numRead;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return bytes;
+    }
     private void setRecipients(Message message, String toEmail,String ccEmail , String bccEmail) {
         try {
             if(!toEmail.isEmpty()) {
