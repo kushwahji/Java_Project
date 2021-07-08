@@ -1,4 +1,5 @@
 package com.santosh;
+import com.santosh.helper.EmailSendHelper;
 import com.santosh.model.Product;
 import com.santosh.utility.CsvWritter;
 import com.santosh.utility.ExcelWriter;
@@ -13,7 +14,10 @@ public class Demo {
         String headers ="ID, Name, Age";
         String tomail = "santoshkumar021990@gmail.com"; String subject = "Test";
         String messageBody = "Test";
-        CsvWritter.csvConverter(productList,headers,tomail,subject,messageBody);
-        ExcelWriter.excelWritter(productList,tomail,subject,messageBody);
+        String file = CsvWritter.csvConverter(productList,headers);
+        String file2 =ExcelWriter.excelWritter(productList);
+        String attachemnt = file.concat(",").concat(file2);
+        EmailSendHelper emailSendHelper = new EmailSendHelper();
+        emailSendHelper.sendMailAttachment("Test",tomail,tomail,tomail,messageBody,attachemnt);
     }
 }

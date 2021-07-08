@@ -18,7 +18,7 @@ import java.util.List;
 public class ExcelWriter {
     private static XSSFWorkbook workbook = new XSSFWorkbook();
     public static XSSFSheet sheet = workbook.createSheet("Product");
-    public static void excelWritter(List<Product> productList, String mailTo, String subject, String message){
+    public static String excelWritter(List<Product> productList){
         String f = "temp.xlsx";
         File file = new File(f);
         try {
@@ -38,12 +38,11 @@ public class ExcelWriter {
             FileOutputStream out = new FileOutputStream(file);
             workbook.write(out);
             out.close();
-            Mail.sendEmailWithAttachments(mailTo,
-                    subject, message, f);
-        } catch (IOException | MessagingException e) {
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        file.deleteOnExit();
+        return f;
     }
     private static void writeHeaderLine() {
         Row row = sheet.createRow(0);

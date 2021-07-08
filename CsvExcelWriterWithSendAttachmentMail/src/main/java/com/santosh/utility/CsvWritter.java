@@ -16,7 +16,7 @@ Santosh Kushwah
 public class CsvWritter {
     public static String fileName = "temp.csv";
     public static File file  = new File(fileName);
-    public static void csvConverter(List<Product> productList, String headers , String mailTo, String subject, String message){
+    public static String csvConverter(List<Product> productList, String headers){
         try {
             FileWriter csvWriter = new FileWriter(fileName());
             List<String[]> data = toStringArray(productList,headers);
@@ -27,13 +27,14 @@ public class CsvWritter {
             csvWriter.flush();
             csvWriter.close();
             //Send Mail
-            Mail.sendEmailWithAttachments(mailTo,
-                    subject, message, fileName());
-            file.deleteOnExit();
+            //Mail.sendEmailWithAttachments(mailTo,
+              //      subject, message, fileName());
+            //file.deleteOnExit();
 
-        } catch (IOException | MessagingException ioException) {
+        } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+        return fileName;
     }
     private static List<String[]> toStringArray(List<Product> emps, String headers) {
         List<String[]> records = new ArrayList<String[]>();
