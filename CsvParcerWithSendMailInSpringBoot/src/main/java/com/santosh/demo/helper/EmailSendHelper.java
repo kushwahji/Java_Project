@@ -29,8 +29,8 @@ public class EmailSendHelper {
         Session session = null;
         String host = "smtp.gmail.com";
         String port = "587";
-        String mailFrom = "vihaan24012021@gmail.com";
-        String password = "Vihaan@24012021";
+        String mailFrom = "xyz@gmail.com";
+        String password = "********";
         try {
             properties.put("mail.smtp.host", host);
             properties.put("mail.smtp.port", port);
